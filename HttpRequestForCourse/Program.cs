@@ -12,14 +12,51 @@ class Program
 {
     static string Reference = "https://v4.21tb.com/courseSetting/coursePlay/e39fa8726abde5b696325391c0471c95%26default%263f68785f8b6f4c1a8427bcd4a1f1e4e4%26e6f0936c961d4796bbee600a1f506926\r\n";
     static string CookieValue = "";
-    static string CourseId = "4b67b9c72f0c9799734e1520c81b60f4";
-    static string SourceId = "85577dc4491f42048d6c1b054caf4901";
+    static string CourseId = "7b6644f0e12bfc71f471587ed49adeef";
+
 
     static async Task Main(string[] args)
     {
         //GetBodyInfo();
         UpdateRecord(GetBodyInfo());
 
+    }
+
+    static string GetSourceId() 
+    {
+        var handler = new HttpClientHandler()
+        {
+            AutomaticDecompression = DecompressionMethods.GZip
+        };
+        // 创建 HttpClient 实例
+        using (HttpClient client = new HttpClient(handler))
+        {
+            string url = $"https://v4.21tb.com/els/html/course/course.getCourseInfoJson.do?courseId={CourseId}";
+            // 设置请求头
+            client.DefaultRequestHeaders.Add("Host", "v4.21tb.com");
+            client.DefaultRequestHeaders.Add("Connection", "keep-alive");
+            client.DefaultRequestHeaders.Add("sec-ch-ua", "\"Chromium\";v=\"124\", \"Microsoft Edge\";v=\"124\", \"Not-A.Brand\";v=\"99\"");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Add("DNT", "1");
+            client.DefaultRequestHeaders.Add("sec-ch-ua-mobile", "?0");
+            client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0");
+            client.DefaultRequestHeaders.Add("sec-ch-ua-platform", "\"Windows\"");
+            client.DefaultRequestHeaders.Add("Sec-Fetch-Site", "same-origin");
+            client.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "cors");
+            client.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "empty");
+            client.DefaultRequestHeaders.Add("Referer", Reference);
+            client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br, zstd");
+            client.DefaultRequestHeaders.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+            client.DefaultRequestHeaders.Add("Cookie", CookieValue);
+
+            // 发送 GET 请求
+            HttpResponseMessage response = client.GetAsync(url).Result;
+            string responseBody = response.Content.ReadAsStringAsync().Result;
+            //Console.WriteLine(responseBody);
+            JObject jsonObject = JObject.Parse(responseBody);
+            Console.WriteLine(jsonObject);
+            return (string)jsonObject["bizResult"]["courseDetail"]["courseId"];
+        }
     }
 
     public static string GetBizCourseId() 
@@ -34,7 +71,7 @@ class Program
             var bodyContent = new
             {
                 courseId = CourseId,
-                sourceId = SourceId,
+                sourceId = GetSourceId(),
                 providerCorpCode = "default"
             };
             string jsonContent = JsonConvert.SerializeObject(bodyContent);
@@ -150,7 +187,7 @@ class Program
                        {
                            recordId = (object)null,
                            courseId = CourseId,
-                           sourceId = SourceId,
+                           sourceId = GetSourceId(),
                            providerCorpCode = "default",
                            chapterId = item["chapterId"],
                            resourceId = item2["resourceId"],
