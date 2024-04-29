@@ -1,4 +1,4 @@
-1.每天需要更新自己的reference，cookievalue，这个用抓包随便抓一个在线学习平台的可成包就可以找到。每天更新一次
+1.每天需要更新自己的reference，cookievalue，这个用抓包随便抓一个在线学习平台地址的随便包就可以找到。每天更新一次
 ![image](https://github.com/wfsunzehao/HttpRequestForCourse/assets/52879120/3bdd14b6-f985-44a3-bfe2-9c6b5a5a728e)
 
 
