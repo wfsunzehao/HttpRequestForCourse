@@ -2,8 +2,8 @@
 ![image](https://github.com/wfsunzehao/HttpRequestForCourse/assets/52879120/3bdd14b6-f985-44a3-bfe2-9c6b5a5a728e)
 
 
-Cookie格式   
-Cookie: local_=zh_CN; eln_session_id=elnSessionId.xxxxxxxxxxxx; corp_code=xxxxxxxx; nxYongdaoIp=; changId=xxxxxxxx; qimo_seosource_0=xxxxxxx; qimo_seokeywords_0=; uuid_xxxxxx-xxxx-xxxx-xxxx-xxxxxxxx=xxxxxx-xxxx-xxxx-xxx-xxxxxxxx; qimo_seosource_xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx=xxxxxxxxxxxxxx; qimo_seokeywords_xxxxxxx-xxxx-xxxx-xxxxx-xxxxxxxxx; qimo_xstKeywords_xxxxxxxx-xxxxx-xxxx-xxxx-xxxxxxx; href=httpsxxxxxxxxxx; accessId=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx; pageViewNum=xxx
+Cookie格式：   
+local_=zh_CN; eln_session_id=elnSessionId.xxxxxxxxxxxx; corp_code=xxxxxxxx; nxYongdaoIp=; changId=xxxxxxxx; qimo_seosource_0=xxxxxxx; qimo_seokeywords_0=; uuid_xxxxxx-xxxx-xxxx-xxxx-xxxxxxxx=xxxxxx-xxxx-xxxx-xxx-xxxxxxxx; qimo_seosource_xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx=xxxxxxxxxxxxxx; qimo_seokeywords_xxxxxxx-xxxx-xxxx-xxxxx-xxxxxxxxx; qimo_xstKeywords_xxxxxxxx-xxxxx-xxxx-xxxx-xxxxxxx; href=httpsxxxxxxxxxx; accessId=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx; pageViewNum=xxx
 
 2.选择课程后，进入播放界面在地址栏有一个CourseId=XXXXXXXXXXXXXX的字段。一直到符号'&'之前和'='之后的字段复制下来，粘贴到代码变量CourseId中去，运行即可完成本课程的学习
 ![image](https://github.com/wfsunzehao/HttpRequestForCourse/assets/52879120/ba99bd80-71e0-46cc-88fb-dc7ab695cf7b)
