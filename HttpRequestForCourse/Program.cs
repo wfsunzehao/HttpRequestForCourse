@@ -10,10 +10,10 @@ using Newtonsoft.Json.Linq;
 
 class Program
 {
-    static string Reference = "https://v4.21tb.com/courseSetting/coursePlay/be143f7a59979effb80da3fe039c389a%26default%26613f573215cd49258db943bb2a4d908a%26e6f0936c961d4796bbee600a1f506926";
-    static string CookieValue = "eln_session_id=elnSessionId.8fdf1dc145e74e39b7b826c4db9145c4; corp_code=wicresoft; nxYongdaoIp=; changId=6412b37f68d6d7c7c3d34b1b924e27e2; local_=zh_CN; qimo_seosource_0=%%E7%%AB%%99%%E5%%86%%85; qimo_seokeywords_0=; uuid_f05eae40-9a31-11e5-83f6-57006c315d67=076a80a9-9c3e-4e17-89a0-75266a07baa4; qimo_seosource_f05eae40-9a31-11e5-83f6-57006c315d67=%%E7%%AB%%99%%E5%%86%%85; qimo_seokeywords_f05eae40-9a31-11e5-83f6-57006c315d67=; qimo_xstKeywords_f05eae40-9a31-11e5-83f6-57006c315d67=; href=https%%3A%%2F%%2Fv4.21tb.com%%2Frtr-frontend%%2Fstudent%%2Findex; accessId=f05eae40-9a31-11e5-83f6-57006c315d67; pageViewNum=41";
-    static string CourseId = "937cdd0fe0964ce5814436da31d5ebcf";
-    static string SourceId = "44dccb60be6941d2993fae464553cda4";
+    static string Reference = "https://v4.21tb.com/courseSetting/coursePlay/e39fa8726abde5b696325391c0471c95%26default%263f68785f8b6f4c1a8427bcd4a1f1e4e4%26e6f0936c961d4796bbee600a1f506926\r\n";
+    static string CookieValue = "";
+    static string CourseId = "4b67b9c72f0c9799734e1520c81b60f4";
+    static string SourceId = "85577dc4491f42048d6c1b054caf4901";
 
     static async Task Main(string[] args)
     {
