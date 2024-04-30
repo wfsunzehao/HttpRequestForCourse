@@ -99,9 +99,24 @@ class Program
             string responseBody = response.Content.ReadAsStringAsync().Result;
             //Console.WriteLine(responseBody);
             JObject jsonObject = JObject.Parse(responseBody);
+            //偶尔用showCourseSettingConfig找到得CourseId是无法返回正确chapter内容的，还要用回最初得CourseId。很小概率会有这个问题
+            if (jsonObject["bizResult"].Count() == 0)
+            {
+                var bodyContent2 = new
+                {
+                    courseId = CourseId,
+                    providerCorpCode = "default"
+                };
+                jsonContent = JsonConvert.SerializeObject(bodyContent2);
+                content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
+                response = httpClient.PostAsync("https://v4.21tb.com/tbc-rms/course/showCourseChapter", content).Result;
+                responseBody = response.Content.ReadAsStringAsync().Result;
+                jsonObject = JObject.Parse(responseBody);
+            }
             // 获取特定字段的值
             //Console.WriteLine("showCourseSettingConfig Request: " + jsonContent);
             //Console.WriteLine("showCourseSettingConfig Respons: "+responseBody);
+
             return (string)jsonObject["bizResult"]["courseId"];
         }
 
