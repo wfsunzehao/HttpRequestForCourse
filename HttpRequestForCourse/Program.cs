@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 class Program
 {
-    static string Reference = "https://v4.21tb.com/courseSetting/coursePlay/e39fa8726abde5b696325391c0471c95%26default%263f68785f8b6f4c1a8427bcd4a1f1e4e4%26e6f0936c961d4796bbee600a1f506926\r\n";
+    static string Reference = "";
     static string CookieValue = "";
     static string CourseId = "7b6644f0e12bfc71f471587ed49adeef";
 
