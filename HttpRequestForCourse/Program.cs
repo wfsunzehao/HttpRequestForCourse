@@ -1,24 +1,61 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 class Program
 {
+   
     static string Reference = "";
     static string CookieValue = "";
-    static string CourseId = "7b6644f0e12bfc71f471587ed49adeef";
+    static string CourseId = "";
 
+    static bool changed = false;
 
     static async Task Main(string[] args)
     {
-        //GetBodyInfo();
-        UpdateRecord(GetBodyInfo());
+        while (true) 
+        {
+            if (Reference.Length <=1)
+            {
+                Console.WriteLine("请输入Reference：");
+                Reference = Console.ReadLine();
+            }
+            if (CookieValue.Length <= 1 ) 
+            {
+                Console.WriteLine("请输入Cookie：");
+                CookieValue = Console.ReadLine();
+            }
+
+            Console.WriteLine("请输入CourseId：");
+            CourseId = Console.ReadLine();
+
+            while (true) 
+            {
+                
+                try
+                {
+                    UpdateRecord(GetBodyInfo());
+                    changed = false;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    Console.WriteLine("配置错误请重新输入配置信息");
+                    break;
+
+                }
+
+                Console.WriteLine("本课程已结束，如果课程进度没有变化请关闭该软件重新输入Refer和Cookie");
+                Console.WriteLine("请输入新的CourseId");
+                CourseId = Console.ReadLine();
+
+            }
+           
+        }
+        
 
     }
 
@@ -52,10 +89,14 @@ class Program
             // 发送 GET 请求
             HttpResponseMessage response = client.GetAsync(url).Result;
             string responseBody = response.Content.ReadAsStringAsync().Result;
-            //Console.WriteLine(responseBody);
             JObject jsonObject = JObject.Parse(responseBody);
-            Console.WriteLine(jsonObject);
-            return (string)jsonObject["bizResult"]["courseDetail"]["courseId"];
+            //Console.WriteLine("GetSourceId: " + jsonObject);
+
+            if (!changed) 
+            {
+                return (string)jsonObject["bizResult"]["courseDetail"]["courseId"];
+            }
+            return (string)jsonObject["bizResult"]["sourceCourseId"];
         }
     }
 
@@ -74,6 +115,7 @@ class Program
                 sourceId = GetSourceId(),
                 providerCorpCode = "default"
             };
+            //Console.WriteLine("SourceId: "+bodyContent.sourceId);
             string jsonContent = JsonConvert.SerializeObject(bodyContent);
             HttpContent content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
 
@@ -99,21 +141,26 @@ class Program
             string responseBody = response.Content.ReadAsStringAsync().Result;
             //Console.WriteLine(responseBody);
             JObject jsonObject = JObject.Parse(responseBody);
-            //偶尔用showCourseSettingConfig找到得CourseId是无法返回正确chapter内容的，还要用回最初得CourseId。很小概率会有这个问题
-            if (jsonObject["bizResult"].Count() == 0)
+            //Console.WriteLine(jsonObject.ToString());           
+            // 获取特定字段的值         
+            if (((string)jsonObject["bizResult"]["settingId"]) == null) 
             {
-                var bodyContent2 = new
+                changed = true;
+                bodyContent = new
                 {
                     courseId = CourseId,
+                    sourceId = GetSourceId(),
                     providerCorpCode = "default"
                 };
-                jsonContent = JsonConvert.SerializeObject(bodyContent2);
+                //Console.WriteLine("SourceId222222: " + bodyContent.sourceId);
+                jsonContent = JsonConvert.SerializeObject(bodyContent);
                 content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
-                response = httpClient.PostAsync("https://v4.21tb.com/tbc-rms/course/showCourseChapter", content).Result;
+                response = httpClient.PostAsync(url, content).Result;
                 responseBody = response.Content.ReadAsStringAsync().Result;
-                jsonObject = JObject.Parse(responseBody);
+                //Console.WriteLine(responseBody);
+                jsonObject = JObject.Parse(responseBody);
+                
             }
-            // 获取特定字段的值
             //Console.WriteLine("showCourseSettingConfig Request: " + jsonContent);
             //Console.WriteLine("showCourseSettingConfig Respons: "+responseBody);
 
@@ -166,9 +213,27 @@ class Program
             HttpResponseMessage response = client.PostAsync("https://v4.21tb.com/tbc-rms/course/showCourseChapter", content).Result;
             string responseBody = response.Content.ReadAsStringAsync().Result;
             JObject jsonObject = JObject.Parse(responseBody);
+            Console.WriteLine("第一次showCourseChapter Request: " + jsonContent);
+            Console.WriteLine("第一次showCourseChapter Respons: " + responseBody);
+            //偶尔用showCourseSettingConfig找到得CourseId是无法返回正确chapter内容的，还要用回最初得CourseId。很小概率会有这个问题
+            Console.WriteLine(jsonObject["bizResult"].Count());
+            if (jsonObject["bizResult"].Count() == 0)
+            {
+                var bodyContent2 = new
+                {
+                    courseId = CourseId,
+                    providerCorpCode = "default"
+                };
+                jsonContent = JsonConvert.SerializeObject(bodyContent2);
+                content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
+                response = client.PostAsync("https://v4.21tb.com/tbc-rms/course/showCourseChapter", content).Result;
+                responseBody = response.Content.ReadAsStringAsync().Result;
+                jsonObject = JObject.Parse(responseBody);
+            }
+
             // 获取特定字段的值
-            Console.WriteLine("showCourseChapter Request: " + jsonContent);
-            Console.WriteLine("showCourseChapter Respons: " + responseBody);
+            Console.WriteLine("第二次showCourseChapter Request: " + jsonContent);
+            Console.WriteLine("第二次showCourseChapter Respons: " + responseBody);
 
             return jsonObject;
 
@@ -189,6 +254,7 @@ class Program
         using (HttpClient client = new HttpClient(handler))
         {
             ArrayList a = new ArrayList();
+            
             // 创建请求的内容
             foreach (var item in job["bizResult"]) 
             {
